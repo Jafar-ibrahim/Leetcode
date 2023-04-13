@@ -4,10 +4,9 @@ class Solution {
         while(start < nums.length-1 && ptr < nums.length){
             if((nums[ptr] > nums[start])){
                 nums[++start] = nums[ptr];
-                count++;
             }
             ptr++;
         }
-        return count;
+        return start+1;
     }
 }
