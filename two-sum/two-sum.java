@@ -10,7 +10,6 @@ class Solution {
             int curr_target = target - nums[curr];
             if(map.get(curr_target) != null && map.get(curr_target)!= curr){
                 answer[0]=curr;
-
                 answer[1] = map.get(curr_target);
                 break;
             }
