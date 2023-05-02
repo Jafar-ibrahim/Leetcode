@@ -15,15 +15,15 @@
  */
 class Solution {
     public static boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        return backtrack(root,subRoot);
+        return traverse(root,subRoot);
 
     }
-    public static boolean backtrack(TreeNode root ,TreeNode subRoot){
+    public static boolean traverse(TreeNode root ,TreeNode subRoot){
         if(root != null){
             if(equalTrees(root,subRoot)) return true;
 
-                return( backtrack(root.left ,subRoot) ||
-                        backtrack(root.right ,subRoot));
+                return( traverse(root.left ,subRoot) ||
+                        traverse(root.right ,subRoot));
 
         }else
             return false;
