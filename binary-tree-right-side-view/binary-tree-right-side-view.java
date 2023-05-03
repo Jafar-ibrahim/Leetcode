@@ -20,17 +20,17 @@ class Solution {
         if(root == null) return answer;
 
         queue.add(root);
-
+        TreeNode popped = null;
         while(!queue.isEmpty()){
             int len = queue.size();
             for(int i = 1 ; i <= len ; i++){
-                TreeNode popped = queue.poll();
-                if(i==len) answer.add(popped.val);
+                popped = queue.poll();
                 if(popped.left != null)
                     queue.add(popped.left);
                 if(popped.right != null)
                     queue.add(popped.right);
             }
+            answer.add(popped.val);
         }
         return answer;
     }
