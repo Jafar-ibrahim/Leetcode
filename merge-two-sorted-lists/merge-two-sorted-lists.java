@@ -14,26 +14,26 @@ class Solution {
         ListNode j = list2;
         ListNode answer = new ListNode(-1);
         ListNode k =answer;
-        while(i != null && j!= null){
-            if(i.val > j.val){
-                 k.next = new ListNode(j.val);
+        while(list1 != null && list2!= null){
+            if(list1.val > list2.val){
+                 k.next = new ListNode(list2.val);
                  k=k.next;
-                 j = j.next;
-            }else if(i.val <= j.val){
-                k.next = new ListNode(i.val);
+                 list2 = list2.next;
+            }else if(list1.val <= list2.val){
+                k.next = new ListNode(list1.val);
                 k=k.next;
-                i = i.next;
+                list1 = list1.next;
             }
         }
-        while(i != null){
-            k.next = new ListNode(i.val);
+        while(list1 != null){
+            k.next = new ListNode(list1.val);
             k=k.next;
-            i = i.next;
+            list1 = list1.next;
         }
-        while(j != null){
-            k.next = new ListNode(j.val);
+        while(list2 != null){
+            k.next = new ListNode(list2.val);
             k=k.next;
-            j = j.next;
+            list2 = list2.next;
         }
         return answer.next;
     }
