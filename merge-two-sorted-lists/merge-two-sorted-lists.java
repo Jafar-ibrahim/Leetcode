@@ -14,11 +14,11 @@ class Solution {
         ListNode k =answer;
         while(list1 != null && list2!= null){
             if(list1.val > list2.val){
-                 k.next = list2;
+                 k.next = new ListNode(list2.val);
                  k=k.next;
                  list2 = list2.next;
             }else if(list1.val <= list2.val){
-                k.next = list1;
+                k.next = new ListNode(list1.val);
                 k=k.next;
                 list1 = list1.next;
             }
