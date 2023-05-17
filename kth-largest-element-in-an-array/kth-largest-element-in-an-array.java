@@ -3,7 +3,8 @@ class Solution {
         int target = nums.length-k;
         int pivot=0,end=nums.length-1;
         while(pivot <= end){
-          int start = pivot;
+          // store the initial start value
+          int temp = pivot;
           for(int i =pivot ; i<end ; i++){
             if(nums[i] <= nums[end]){
               swap(pivot,i,nums);
@@ -16,7 +17,8 @@ class Solution {
             pivot++;
           }else{
             end=pivot-1;
-            pivot=start;
+            // reassign the initial starting value to pivot again for the next iteration
+            pivot=temp;
           }
         }
         return -1;
