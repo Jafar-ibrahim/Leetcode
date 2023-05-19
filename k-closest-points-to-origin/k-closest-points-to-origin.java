@@ -17,7 +17,7 @@ class Solution {
     }
 
     public static int distance(int[] point){
-        return (int)(Math.pow(point[0],2) + Math.pow(point[1],2));
+        return (point[0]*point[0] + point[1] * point[1]);
     }
     
 }
