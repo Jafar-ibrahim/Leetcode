@@ -8,12 +8,7 @@ class Solution {
             if(max_heap.size() > k)
                 max_heap.poll();
         }
-        for(int i=0 ; i<k ; i++){
-            int[] temp = max_heap.poll();
-            answer[i][0] = temp[0];
-            answer[i][1] = temp[1];
-        }
-        return answer;
+        return max_heap.toArray(new int[0][0]);
     }
 
     public static int distance(int[] point){
