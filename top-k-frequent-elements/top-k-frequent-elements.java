@@ -1,33 +1,30 @@
 class Solution {
-    public  int[] topKFrequent(int[] nums, int k) {
-        List<List<Integer>> bucket = new ArrayList<>(nums.length+1);
-        List<Integer> answer = new ArrayList<>(k);
+    public int[] topKFrequent(int[] nums, int k) {
         Map<Integer,Integer> map = new HashMap<>();
-        for(int i=0;i<nums.length+1;i++){
-            bucket.add(new ArrayList<>());
+        List<Integer>[] bucket = new List[nums.length + 1];
+        
+        //count the frequency
+        for ( int num : nums ){
+            map.put(num, map.getOrDefault(num, 0) + 1);
         }
-
-        for(int n: nums){
-            map.put(n , map.getOrDefault(n,0)+1);
+        
+        // fill the bucket with (frequncey -> list) or numbers with that frequency
+        for ( int key : map.keySet() ){
+            int freq = map.get(key);  
+            if ( bucket[freq] == null ) bucket[freq] = new ArrayList<>();
+            
+            bucket[freq].add(key);
         }
-        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            int freq = entry.getValue();
-            bucket.get(freq).add(entry.getKey());
-        }
-        int counter = bucket.size()-1;
-        while(counter > 0 && k > 0){
-            List<Integer> curr = bucket.get(counter);
-            if(!curr.isEmpty()){
-                for (int n :curr){
-                    answer.add(n);
-                     k--;
-                }
-               
+        
+        //fill the elemnts in result array
+        int[] res = new int[k];
+        int j = 0;
+        for ( int i = nums.length; i >= 0 && j < k; i-- ){
+            if ( bucket[i] != null ){
+                for ( int ele : bucket[i]) res[j++] = ele;
             }
-            counter--;
         }
-
-
-        return answer.stream().mapToInt(i->i).toArray();
+        
+        return res;
     }
 }
