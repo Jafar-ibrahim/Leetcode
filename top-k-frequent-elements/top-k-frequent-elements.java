@@ -11,12 +11,14 @@ class Solution {
             map.put(n , map.getOrDefault(n,0)+1);
         }
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            bucket.get(entry.getValue()).add(entry.getKey());
+            int freq = entry.getValue();
+            bucket.get(freq).add(entry.getKey());
         }
         int counter = bucket.size()-1;
         while(counter > 0 && k > 0){
-            if(!bucket.get(counter).isEmpty()){
-                for (int n :bucket.get(counter)){
+            List<Integer> curr = bucket.get(counter);
+            if(!curr.isEmpty()){
+                for (int n :curr){
                     answer.add(n);
                      k--;
                 }
