@@ -1,9 +1,9 @@
 class Solution {
     public int findDuplicate(int[] nums) {
-        Map<Integer,Integer> map =new HashMap<>();
+        int[] map =new int[nums.length+1];
         for(int n:nums){
-            map.put(n,map.getOrDefault(n,0)+1);
-            if(map.get(n) > 1)
+            map[n]++;
+            if(map[n] > 1)
                 return n;
         }
         return -1;
