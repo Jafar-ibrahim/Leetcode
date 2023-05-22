@@ -9,11 +9,11 @@ class Solution {
             if(!compareWords(words[i],words[i+1],map)) return false;
         }
         return true;
-
-
     }
+
     public static boolean compareWords(String s1 , String s2 , Map<Character,Integer> map){
         int p1 = 0 , p2 = 0 ;
+        
         while(p1 < s1.length() && p2 < s2.length()){
             if(map.get(s1.charAt(p1)) > map.get(s2.charAt(p2))) 
                 return false;
