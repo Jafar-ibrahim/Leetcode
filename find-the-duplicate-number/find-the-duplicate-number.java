@@ -1,10 +1,10 @@
 class Solution {
     public int findDuplicate(int[] nums) {
-        Set<Integer> set = new HashSet<>();
+        int[] map =new int[nums.length+1];
         for(int n:nums){
-            if(set.contains(n))
+            map[n]++;
+            if(map[n] > 1)
                 return n;
-            set.add(n);
         }
         return -1;
     }
