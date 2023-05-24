@@ -1,4 +1,4 @@
-<p>Given the <code>root</code> of a binary tree, return <em>its maximum depth</em>.</p>
+<h2><a href="https://leetcode.com/problems/maximum-depth-of-binary-tree">Maximum Depth of Binary Tree</a></h2> <img src='https://img.shields.io/badge/Difficulty-Easy-brightgreen' alt='Difficulty: Easy' /><hr><p>Given the <code>root</code> of a binary tree, return <em>its maximum depth</em>.</p>
 
 <p>A binary tree&#39;s <strong>maximum depth</strong>&nbsp;is the number of nodes along the longest path from the root node down to the farthest leaf node.</p>
 
