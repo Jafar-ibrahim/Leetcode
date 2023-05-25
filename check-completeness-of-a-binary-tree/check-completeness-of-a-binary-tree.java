@@ -18,6 +18,7 @@ class Solution {
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         TreeNode prev =root;
+        
         while(!queue.isEmpty()){
              TreeNode curr = queue.remove();
              if(prev == null && curr != null) return false;
