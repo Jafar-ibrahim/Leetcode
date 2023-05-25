@@ -1,4 +1,4 @@
-<p>Given the <code>root</code> of a binary tree, invert the tree, and return <em>its root</em>.</p>
+<h2><a href="https://leetcode.com/problems/invert-binary-tree">Invert Binary Tree</a></h2> <img src='https://img.shields.io/badge/Difficulty-Easy-brightgreen' alt='Difficulty: Easy' /><hr><p>Given the <code>root</code> of a binary tree, invert the tree, and return <em>its root</em>.</p>
 
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
