@@ -24,6 +24,7 @@ class Solution {
 
         for(Map.Entry<String, Integer>entry:map.entrySet()){
             maxheap.add(new Pair(entry.getKey(),entry.getValue()));
+            
         }
             List<String> res = new ArrayList<>();
             for(int i=0;i<k;i++){
