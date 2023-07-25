@@ -1,28 +1,27 @@
-public class TimeMap {
+ class TimeMap {
 
-    private Map<String,TreeMap<Integer,String>> map;
-
-    /** Initialize your data structure here. */
-    public TimeMap() {
-        map = new HashMap<>();
-    }
-
-    public void set(String key, String value, int timestamp) {
-        if(!map.containsKey(key)) {
-            map.put(key,new TreeMap<>());
+        Map<String,TreeMap<Integer,String>> map ;
+        public TimeMap() {
+            map = new HashMap<>();
         }
-        map.get(key).put(timestamp,value);
-    }
 
-    public String get(String key, int timestamp) {
-        TreeMap<Integer,String> treeMap = map.get(key);
-        if(treeMap==null) {
+        public void set(String key, String value, int timestamp) {
+            map.computeIfAbsent(key, k -> new TreeMap<Integer, String>());
+            map.get(key).put(timestamp,value);
+        }
+
+        public String get(String key, int timestamp) {
+            if(map.get(key) != null) {
+                TreeMap<Integer, String> currMap = map.get(key);
+                if (currMap.get(timestamp) != null)
+                    return currMap.get(timestamp);
+                
+                Integer floorKey = currMap.floorKey(timestamp);
+                if (floorKey != null) {
+                    return currMap.get(floorKey);
+                }
+            }
+
             return "";
         }
-        Integer floor = treeMap.floorKey(timestamp);
-        if(floor==null) {
-            return "";
-        }
-        return treeMap.get(floor);
     }
-}
