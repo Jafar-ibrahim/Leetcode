@@ -1,7 +1,6 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
         Arrays.sort(intervals, Comparator.comparingInt(x -> x[0]));
-        System.out.println(Arrays.deepToString(intervals));
         ArrayList<int[]> answer = new ArrayList<>();
         int length=0;
         int currEnd = intervals[0][1];
@@ -13,7 +12,6 @@ class Solution {
                 length++;
             }
             currEnd = Math.max(currEnd,intervals[i][1]);
-            //currStart = intervals[i][0];
         }
             answer.add(new int[]{currStart,currEnd});
             return answer.toArray(new int[length][]);
