@@ -19,7 +19,7 @@ class Solution {
                     right = mid -1;
         }
         else
-            left += 1;
+                left += 1;
     }
 
     return false;
