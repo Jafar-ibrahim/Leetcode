@@ -1,44 +1,24 @@
 class Solution {
+    List<String> ans = new ArrayList<>();
+    String str;
     public List<String> restoreIpAddresses(String s) {
-        List<String> answer = new ArrayList<>();
-        StringBuilder sb = new StringBuilder(s);
-        backtrack(answer ,s , sb , 0 , 0);
-        return answer;
-    }
+        str = s;
+        magical("", 0, 0);
+        return ans;
+    } 
 
-    public static void backtrack(List<String> answer ,String given, StringBuilder sb   , int dotsCount , int index){
-
-        if(dotsCount == 3 ){
-            if (isValid(sb, sb.length()-1))
-                answer.add(sb.toString());
+    void magical( String path, int index, int dots) {
+        if (dots > 4) return;
+        if (dots == 4 && index >= str.length()) {
+            ans.add(path.substring(0,path.length()-1));
             return;
         }
-
-        for(int i = index ; i < given.length() + dotsCount; i++){
-            if(sb.charAt(i)=='.' || !isValid(sb , i))
-                continue;
-            sb.insert(i+1,'.');
-            backtrack(answer , given , sb , dotsCount +1 ,i+2);
-            sb.delete(i+1 , i+2);
+        for (int length = 1; length <= 3 && index + length <= str.length(); length++) {
+            String num = str.substring(index, index + length);
+            if (num.charAt(0) == '0' && length != 1) break;
+            else if (Integer.parseInt(num) <= 255) {
+                magical( path + str.substring(index, index + length) + ".", index + length,dots + 1);
+            }
         }
-
-    }
-
-    public static boolean isValid(StringBuilder sb , int index ){
-        int start = index;
-
-        while(start > 0 && sb.charAt(start) != '.'){  // 25525511135
-            if(index - start > 3) return false;
-            start--;
-        }
-
-        String sectionString =(start > 0)? sb.substring(start+1,index+1) : sb.substring(start,index+1);
-        if(sectionString.isEmpty() || sectionString.length() > 1 && sectionString.charAt(0) == '0')
-            return false;
-        int sectionNumber = Integer.parseInt(sectionString);
-
-        return sectionNumber <= 255;
-
-
     }
 }
