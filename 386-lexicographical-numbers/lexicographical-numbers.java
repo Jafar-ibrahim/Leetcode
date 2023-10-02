@@ -1,21 +1,20 @@
 class Solution {
 
     public List<Integer> lexicalOrder(int n) {
-        List<Integer> list = new ArrayList<>(n);
-        int curr = 1;
-        for (int i = 1; i <= n; i++) {
-            list.add(curr);
-            if (curr * 10 <= n) {
-                curr *= 10;
-            } else if (curr % 10 != 9 && curr + 1 <= n) {
-                curr++;
-            } else {
-                while ((curr / 10) % 10 == 9) {
-                    curr /= 10;
-                }
-                curr = curr / 10 + 1;
-            }
-        }
-        return list;
+        List<Integer> answer = new ArrayList<>();
+        generate(1 ,9 , n , answer);
+        return answer;
+    }
+
+    public static void generate(int curr ,int max , int n , List<Integer> answer){
+        if(curr > n || curr > max || curr <= 0)
+            return;
+
+        answer.add(curr );
+        int pow = 0;
+        int temp = curr;
+        
+        generate(curr*10 , curr*10 +9 , n , answer);
+        generate(curr + 1 , max ,  n , answer);
     }
 }
