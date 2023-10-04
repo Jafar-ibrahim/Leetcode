@@ -1,29 +1,19 @@
 class Solution {
-    int answer = 0;
-    public int subsetXORSum(int[] nums) {
-        Arrays.sort(nums);
-        backtrack(nums , new ArrayList<>() , 0);
+    	public int subsetXORSum(int[] nums) {
+        return helper(nums, 0, 0);
+    }
     
-        return answer;
-    }
-    void backtrack( int[] nums , ArrayList<Integer> subset , int index){
+    private int helper(int[] nums, int index, int currentXor) {
+        // return currentXor when all elements in nums are already considered
+        if (index == nums.length) return currentXor;
         
-        answer += bitwiseOR(subset);
+        // calculate sum of xor with current element
+        int withElement = helper(nums, index + 1, currentXor ^ nums[index]);
         
-        for(int i = index; i < nums.length ; i++){
-            subset.add(nums[i]);
-            backtrack(nums , subset , i+1);
-            subset.remove(subset.size()-1);
-        }
-    }
-
-    public static int bitwiseOR(List<Integer> subset){
-        if(subset.isEmpty())
-            return 0;
-        int temp = 0;
-        for(int n : subset){
-            temp ^= n;
-        }
-        return temp;
+        // calculate sum of xor without current element
+        int withoutElement = helper(nums, index + 1, currentXor);
+        
+        // return sum of xors from recursion
+        return withElement + withoutElement;
     }
 }
