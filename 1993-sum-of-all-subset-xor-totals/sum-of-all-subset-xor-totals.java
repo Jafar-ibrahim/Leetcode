@@ -11,7 +11,6 @@ class Solution {
         answer += bitwiseOR(subset);
         
         for(int i = index; i < nums.length ; i++){
-            //if( i > index && nums[i] == nums[i-1]) continue;
             subset.add(nums[i]);
             backtrack(nums , subset , i+1);
             subset.remove(subset.size()-1);
