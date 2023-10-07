@@ -11,7 +11,7 @@ class Solution {
         map.put(7,new char[]{'p','q','r','s'});
         map.put(8,new char[]{'t','u','v'});
         map.put(9,new char[]{'w','x','y','z'});
-        
+
         List<String> answer = new ArrayList<>();
         StringBuilder sb = new StringBuilder();
         backtrack(digits, map , answer , sb ,0 );
@@ -19,8 +19,6 @@ class Solution {
     }
 
     public static void backtrack(String digits , Map<Integer,char[]> map , List<String> answer , StringBuilder sb , int index){
-
-        //if(index > digits.length() - 1 ) return;
 
         if(index > digits.length() - 1 ){
             answer.add(sb.toString());
