@@ -16,7 +16,7 @@ class Solution {
         }
 
         for(int i = index ; i < candidates.length && candidates[i]<=target; i++){
-            if(sum+candidates[i] > target) continue;
+            if(sum+candidates[i] > target) break;
             curr.add(candidates[i]);
             backtrack(candidates,answer,curr,target,i,sum+candidates[i]);
             curr.remove(curr.size() - 1);
