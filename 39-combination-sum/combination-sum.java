@@ -9,7 +9,6 @@ class Solution {
 
     public static void backtrack(int[] candidates , List<List<Integer>> answer , ArrayList<Integer> curr , int target , int index , int sum){
 
-        //if(sum > target) return;
         if(sum == target){
             answer.add(new ArrayList(curr));
             return;
