@@ -1,6 +1,5 @@
 class Solution {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        // {1,1,1,3} 4
         List<List<Integer>> answer = new ArrayList<>();
         Arrays.sort(candidates);
         backtrack(candidates, answer , new ArrayList() , target , 0,0);
