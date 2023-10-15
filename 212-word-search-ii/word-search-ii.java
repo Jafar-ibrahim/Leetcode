@@ -1,73 +1,49 @@
+class TrieNode {
+    TrieNode[] next = new TrieNode[26];
+    String word;
+}
 
 class Solution {
     public List<String> findWords(char[][] board, String[] words) {
-        List<String> answer = new ArrayList<>();
-        int m = board.length, n = board[0].length;
-        for(String word : words){
-            
-            if (m*n < word.length())
-                continue;
-            char[] wrd = word.toCharArray();
-            int[] boardf = new int[128];
-            for (int i = 0; i < m; ++i)
-            {
-                for (int j = 0; j < n; ++j)
-                {
-                    ++boardf[board[i][j]];
-                }
-            }
-            for (char ch : wrd)
-            {
-                if (--boardf[ch] < 0)
-                {
-                    continue;
-                }
-            }
-            if (boardf[wrd[0]] > boardf[wrd[wrd.length - 1]])
-                reverse(wrd);
-            outerloop:    
-            for (int i = 0; i < m; ++i)
-            {
-                for (int j = 0; j < n; ++j)
-                {
-                    if (wrd[0] == board[i][j]
-                        && found(board, i, j, wrd, new boolean[m][n], 0))                       {
-                            answer.add(new String(word));
-                            break outerloop;
-                        }
-                }
-            }
+    List<String> res = new ArrayList<>();
+    TrieNode root = buildTrie(words);
+    for (int i = 0; i < board.length; i++) {
+        for (int j = 0; j < board[0].length; j++) {
+            dfs (board, i, j, root, res);
         }
-        return answer;
+    }
+    return res;
+}
+
+public void dfs(char[][] board, int i, int j, TrieNode p, List<String> res) {
+    char c = board[i][j];
+    if (c == '#' || p.next[c - 'a'] == null) return;
+    p = p.next[c - 'a'];
+    if (p.word != null) {   // found one
+        res.add(p.word);
+        p.word = null;     // de-duplicate
     }
 
-    private void reverse(char[] word)
-    {
-        int n = word.length;
-        for (int i = 0; i < n/2; ++i)
-        {
-            char temp = word[i];
-            word[i] = word[n - i - 1];
-            word[n - i - 1] = temp;
-        }
+    board[i][j] = '#';
+    if (i > 0) dfs(board, i - 1, j ,p, res); 
+    if (j > 0) dfs(board, i, j - 1, p, res);
+    if (i < board.length - 1) dfs(board, i + 1, j, p, res); 
+    if (j < board[0].length - 1) dfs(board, i, j + 1, p, res); 
+    board[i][j] = c;
+}
+
+public TrieNode buildTrie(String[] words) {
+    TrieNode root = new TrieNode();
+    for (String w : words) {
+        TrieNode p = root;
+        for (char c : w.toCharArray()) {
+            int i = c - 'a';
+            if (p.next[i] == null) p.next[i] = new TrieNode();
+            p = p.next[i];
+       }
+       p.word = w;
     }
-    private static final int[] dirs = {0, -1, 0, 1, 0};
-    private boolean found(char[][] board, int row, int col, char[] word,
-                        boolean[][] visited, int index)
-    {
-        if (index == word.length)
-            return true;
-        if (row < 0 || col < 0 || row == board.length || col == board[0].length
-            || board[row][col] != word[index] || visited[row][col])
-            return false;
-        visited[row][col] = true;
-        for (int i = 0; i < 4; ++i)
-        {
-            if (found(board, row + dirs[i], col + dirs[i + 1],
-                word, visited, index + 1))
-                return true;
-        }
-        visited[row][col] = false;
-        return false;
-    }
+    return root;
+}
+
 }
