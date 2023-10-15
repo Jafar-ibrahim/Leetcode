@@ -1,38 +1,40 @@
 class Solution {
     public boolean exist(char[][] board, String word) {
-    
-        boolean[][] visited = new boolean[board.length][board[0].length];
-        for(int i = 0 ; i < board.length ; i++){
-            for(int j = 0 ; j < board[i].length ; j++){
-                if(board[i][j] == word.charAt(0) && backtrack(board,word,visited,i,j,0)){
+        int m = board.length, n = board[0].length;
+        
+        char[] wrd = word.toCharArray();
+        int[] boardf = new int[128];
+        
+        for (int i = 0; i < m; ++i)
+        {
+            for (int j = 0; j < n; ++j)
+            {
+                if (word.charAt(0) == board[i][j]
+                    && found(board, i, j, wrd, new boolean[m][n], 0))
                     return true;
-                }
             }
         }
-    return false;
+        return false;
     }
 
-    public static boolean backtrack (char[][] board, String word,boolean[][] visited , int row , int col , int index ){
-
-        if(index == word.length()) return true;
-        
-        if(row < 0 || col < 0 ||
-         row > board.length-1 ||
-        col > board[0].length-1) return false;
-
-       
-        if(visited[row][col] || board[row][col] != word.charAt(index)) return false;
-         
-       
-
-            visited[row][col] = true;
-        boolean left =  backtrack(board,word,visited,row,col-1,index+1);
-        boolean up = backtrack(board,word,visited,row-1,col,index+1);
-        boolean right = backtrack(board,word,visited,row,col+1,index+1);
-        boolean down = backtrack(board,word,visited,row+1,col,index+1);
-            visited[row][col] = false;
-
-        return left || up || right || down ;
-    }
     
+    private static final int[] dirs = {0, -1, 0, 1, 0};
+    private boolean found(char[][] board, int row, int col, char[] word,
+                        boolean[][] visited, int index)
+    {
+        if (index == word.length)
+            return true;
+        if (row < 0 || col < 0 || row == board.length || col == board[0].length
+            || board[row][col] != word[index] || visited[row][col])
+            return false;
+        visited[row][col] = true;
+        for (int i = 0; i < 4; ++i)
+        {
+            if (found(board, row + dirs[i], col + dirs[i + 1],
+                word, visited, index + 1))
+                return true;
+        }
+        visited[row][col] = false;
+        return false;
+    }
 }
