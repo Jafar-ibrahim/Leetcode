@@ -1,22 +1,16 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> answer = new ArrayList<>();
-        answer.add(new ArrayList<Integer>());
-        for(int n : nums ){
-            generate(answer,new ArrayList<>(),n);
+        answer.add(new ArrayList<>());
+        for(int n : nums){
+            int len = answer.size();
+            for(int i = 0 ; i < len ; i++){
+                List<Integer> curr = new ArrayList(answer.get(i));
+                curr.add(n);
+                answer.add(curr);
+            }
         }
         return answer;
     }
-    void generate(List<List<Integer>> answer ,List<List<Integer>> curr, int n){
-        for(List<Integer> list : answer){
-            List<Integer> temp = new ArrayList<>(list);
-            temp.add(n);
-            curr.add(temp);
-        }
-        
-        for(List<Integer> list : curr){
-            answer.add(list);
-        }
-    }
-    
-    }
+
+}
