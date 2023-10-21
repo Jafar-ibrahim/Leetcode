@@ -12,17 +12,18 @@ class Solution {
             }
         }
 
-        boolean[] rows = new boolean[n];
-        boolean[] cols = new boolean[n];
-        boolean[] diagLeft  = new boolean[2*n - 1];
-        boolean[] diagRight  = new boolean[2*n - 1];
+        boolean[][] bool = new boolean[4][];
+        bool[0] = new boolean[n];
+        bool[1] = new boolean[n];
+        bool[2] = new boolean[2*n - 1];
+        bool[3] = new boolean[2*n - 1];
 
-        backtrack(answer,board,rows,cols,diagLeft,diagRight,0,0,n);
+        backtrack(answer,board,bool,0,0,n);
         return answer;
     }
 
 
-    public static void backtrack(List<List<String>> answer ,char[][] board, boolean[] rows , boolean[] cols  , boolean[] diagLeft,boolean[] diagRight , int row , int col , int n){
+    public static void backtrack(List<List<String>> answer ,char[][] board, boolean[][] bool , int row , int col , int n){
 
         if( n == 0 ){
             answer.add(boardString(board));
@@ -31,20 +32,20 @@ class Solution {
 
 
         for(int i = row ; i < board.length ; i++){
-            if(rows[i]) continue;
+            if(bool[0][i]) continue;
             for(int j = 0 ; j < board.length ; j++){
-                if(cols[j] || diagLeft[i+j] || diagRight[(board.length -1) - i +j]) continue;
-                rows[i] = true ;
-                cols[j] = true ;
-                diagLeft[i+j] = true ;
-                diagRight[(board.length -1) - i +j] = true ;
+                if(bool[1][j] || bool[2][i+j] || bool[3][(board.length -1) - i +j]) continue;
+                bool[0][i] = true ;
+                bool[1][j] = true ;
+                bool[2][i+j] = true ;
+                bool[3][(board.length -1) - i +j] = true ;
                 board[i][j] = 'Q';
-                backtrack(answer,board,rows,cols,diagLeft,diagRight,i,j,n-1);
+                backtrack(answer,board,bool,i,j,n-1);
                 board[i][j] = '.';
-                rows[i] = false ;
-                cols[j] = false ;
-                diagLeft[i+j] = false ;
-                diagRight[(board.length -1) - i +j] = false ;
+                bool[0][i] = false ;
+                bool[1][j] = false ;
+                bool[2][i+j] = false ;
+                bool[3][(board.length -1) - i +j] = false ;
 
             }
         }
