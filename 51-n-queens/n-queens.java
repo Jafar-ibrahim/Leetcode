@@ -30,22 +30,25 @@ class Solution {
             return;
         }
 
+
+        for(int i = row ; i < board.length ; i++){
+            if(bool[0][i]) continue;
             for(int j = 0 ; j < board.length ; j++){
-                if(bool[1][j] || bool[2][row+j] || bool[3][(board.length -1) - row +j]) continue;
-                bool[0][row] = true ;
+                if(bool[1][j] || bool[2][i+j] || bool[3][(board.length -1) - i +j]) continue;
+                bool[0][i] = true ;
                 bool[1][j] = true ;
-                bool[2][row+j] = true ;
-                bool[3][(board.length -1) - row +j] = true ;
-                board[row][j] = 'Q';
-                backtrack(answer,board,bool,row + 1,n-1);
-                board[row][j] = '.';
-                bool[0][row] = false ;
+                bool[2][i+j] = true ;
+                bool[3][(board.length -1) - i +j] = true ;
+                board[i][j] = 'Q';
+                backtrack(answer,board,bool,i + 1,n-1);
+                board[i][j] = '.';
+                bool[0][i] = false ;
                 bool[1][j] = false ;
-                bool[2][row+j] = false ;
-                bool[3][(board.length -1) - row +j] = false ;
+                bool[2][i+j] = false ;
+                bool[3][(board.length -1) - i +j] = false ;
 
             }
-
+        }
     }
 
     public static List<String> boardString(char[][] board){
