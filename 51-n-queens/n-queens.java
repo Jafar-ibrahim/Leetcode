@@ -18,12 +18,12 @@ class Solution {
         bool[2] = new boolean[2*n - 1];
         bool[3] = new boolean[2*n - 1];
 
-        backtrack(answer,board,bool,0,0,n);
+        backtrack(answer,board,bool,0,n);
         return answer;
     }
 
 
-    public static void backtrack(List<List<String>> answer ,char[][] board, boolean[][] bool , int row , int col , int n){
+    public static void backtrack(List<List<String>> answer ,char[][] board, boolean[][] bool , int row  , int n){
 
         if( n == 0 ){
             answer.add(boardString(board));
@@ -40,7 +40,7 @@ class Solution {
                 bool[2][i+j] = true ;
                 bool[3][(board.length -1) - i +j] = true ;
                 board[i][j] = 'Q';
-                backtrack(answer,board,bool,i,j,n-1);
+                backtrack(answer,board,bool,i + 1,n-1);
                 board[i][j] = '.';
                 bool[0][i] = false ;
                 bool[1][j] = false ;
