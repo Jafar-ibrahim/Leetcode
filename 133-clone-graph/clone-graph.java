@@ -4,7 +4,6 @@ class Solution {
         Queue<Node> q = new LinkedList<>();
         q.add(node);
         while(q.peek() != null){
-            System.out.println(q);
 
             Node queueCurr = q.poll();
             int queueCurrVal = queueCurr.val;
