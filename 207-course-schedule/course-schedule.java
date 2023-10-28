@@ -1,40 +1,46 @@
+import java.util.*;
+
 class Solution {
-    public boolean canFinish(int n, int[][] prerequisites) {
-        List<Integer>[] adj = new List[n];
-        int[] indegree = new int[n];
-        List<Integer> ans = new ArrayList<>();
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        ArrayList<Integer>[] adj = new ArrayList[numCourses];
+        boolean[] visited = new boolean[numCourses];
+        Set<Integer> doable = new HashSet<>();
+        boolean result = true;
 
-        for (int[] pair : prerequisites) {
-            int course = pair[0];
-            int prerequisite = pair[1];
-            if (adj[prerequisite] == null) {
-                adj[prerequisite] = new ArrayList<>();
-            }
-            adj[prerequisite].add(course);
-            indegree[course]++;
+        for(int[] edge : prerequisites){
+            if(adj[edge[0]] == null)
+                adj[edge[0]] = new ArrayList<>();
+            adj[edge[0]].add(edge[1]);
         }
 
-        Queue<Integer> queue = new LinkedList<>();
-        for (int i = 0; i < n; i++) {
-            if (indegree[i] == 0) {
-                queue.offer(i);
-            }
+        for(int i = 0 ; i < numCourses && result ; i++){
+            if(!visited[i])
+                result = result && helper(adj,visited,doable,i);
         }
 
-        while (!queue.isEmpty()) {
-            int current = queue.poll();
-            ans.add(current);
+        return result;
+    }
 
-            if (adj[current] != null) {
-                for (int next : adj[current]) {
-                    indegree[next]--;
-                    if (indegree[next] == 0) {
-                        queue.offer(next);
-                    }
-                }
+    public static boolean helper(ArrayList<Integer>[] adj
+            , boolean[] visited,  Set<Integer> doable, int curr){
+
+        if (visited[curr]) return false;
+        if (doable.contains(curr)) return true;
+
+        visited[curr] = true;
+        boolean result = true;
+        doable.add(curr);
+
+
+        if (adj[curr] != null)
+            for(int i = 0 ; i < adj[curr].size() && result ; i++){
+                int n = adj[curr].get(i);
+
+                if (!helper(adj, visited, doable, n))
+                    return false;
+
             }
-        }
-
-        return ans.size() == n;
+        visited[curr] = false;
+        return result;
     }
 }
