@@ -1,40 +1,40 @@
 class Solution {
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-        ArrayList<Integer>[] adj = new ArrayList[numCourses];
-        boolean[] visited = new boolean[numCourses];
-        Set<Integer> doable = new HashSet<>();
-        boolean result = true;
+    public boolean canFinish(int n, int[][] prerequisites) {
+        List<Integer>[] adj = new List[n];
+        int[] indegree = new int[n];
+        List<Integer> ans = new ArrayList<>();
 
-        for(int[] edge : prerequisites){
-            if(adj[edge[0]] == null)
-                adj[edge[0]] = new ArrayList<>();
-            adj[edge[0]].add(edge[1]);
-        }
-
-        for(int i = 0 ; i < numCourses && result ; i++){
-            if(!visited[i])
-                result = result && helper(adj,visited,doable,i);
-        }
-
-        return result;
-    }
-
-    public static boolean helper(ArrayList<Integer>[] adj
-            , boolean[] visited,  Set<Integer> doable, int curr){
-
-        visited[curr] = true;
-        boolean result = true;
-        if (adj[curr] != null)
-            for(int i = 0 ; i < adj[curr].size() && result ; i++){
-                int n = adj[curr].get(i);
-
-                if (!visited[n])
-                    result = result && helper(adj, visited, doable, n);
-
-                else if (!doable.contains(n))
-                    return false;
+        for (int[] pair : prerequisites) {
+            int course = pair[0];
+            int prerequisite = pair[1];
+            if (adj[prerequisite] == null) {
+                adj[prerequisite] = new ArrayList<>();
             }
-        doable.add(curr);
-        return result;
+            adj[prerequisite].add(course);
+            indegree[course]++;
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < n; i++) {
+            if (indegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int current = queue.poll();
+            ans.add(current);
+
+            if (adj[current] != null) {
+                for (int next : adj[current]) {
+                    indegree[next]--;
+                    if (indegree[next] == 0) {
+                        queue.offer(next);
+                    }
+                }
+            }
+        }
+
+        return ans.size() == n;
     }
 }
