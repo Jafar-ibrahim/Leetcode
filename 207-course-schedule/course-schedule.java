@@ -30,11 +30,13 @@ class Solution {
             for(int i = 0 ; i < adj[curr].size() && result ; i++){
                 int n = adj[curr].get(i);
 
-                if (visited[n]  && !set.contains(n))
-                    return false;
-
                 if (!visited[n])
                     result = result && helper(adj, visited, set, n);
+
+                if (/*visited[n]  &&*/ !set.contains(n))
+                    return false;
+
+                
             }
         set.add(curr);
         return result;
