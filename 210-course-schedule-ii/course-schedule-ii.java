@@ -1,10 +1,8 @@
-
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
         ArrayList<Integer>[] adj = new ArrayList[numCourses];
         boolean[] visited = new boolean[numCourses];
         Set<Integer> done = new LinkedHashSet<>();
-        boolean result = true;
 
         for(int[] edge : prerequisites){
             if(adj[edge[0]] == null)
@@ -12,7 +10,7 @@ class Solution {
             adj[edge[0]].add(edge[1]);
         }
 
-        for(int i = 0 ; i < numCourses && result ; i++){
+        for(int i = 0 ; i < numCourses  ; i++){
             if(!visited[i] && !helper(adj,visited,done,i))
                 return new int[]{};
         }
