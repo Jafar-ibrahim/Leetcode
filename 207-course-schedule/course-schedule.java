@@ -4,7 +4,7 @@ class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         ArrayList<Integer>[] adj = new ArrayList[numCourses];
         boolean[] visited = new boolean[numCourses];
-        Stack<Integer> stack = new Stack<>();
+        Set<Integer> set = new HashSet<>();
         boolean result = true;
 
         for(int[] edge : prerequisites){
@@ -15,14 +15,14 @@ class Solution {
 
         for(int i = 0 ; i < numCourses && result ; i++){
             if(!visited[i])
-                result = result && helper(adj,visited,stack,i);
+                result = result && helper(adj,visited,set,i);
         }
 
         return result;
     }
 
     public static boolean helper(ArrayList<Integer>[] adj
-            , boolean[] visited, Stack<Integer> stack, int curr){
+            , boolean[] visited,  Set<Integer> set, int curr){
 
         visited[curr] = true;
         boolean result = true;
@@ -30,13 +30,13 @@ class Solution {
             for(int i = 0 ; i < adj[curr].size() && result ; i++){
                 int n = adj[curr].get(i);
 
-                if (visited[n]  && !stack.contains(n))
+                if (visited[n]  && !set.contains(n))
                     return false;
 
                 if (!visited[n])
-                    result = result && helper(adj, visited, stack, n);
+                    result = result && helper(adj, visited, set, n);
             }
-        stack.add(curr);
+        set.add(curr);
         return result;
     }
 }
