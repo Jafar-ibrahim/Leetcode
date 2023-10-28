@@ -29,7 +29,7 @@ class Solution {
 
         visited[curr] = true;
         boolean result = true;
-        doable.add(curr);
+        
 
 
         if (adj[curr] != null)
@@ -40,6 +40,7 @@ class Solution {
                     return false;
 
             }
+        doable.add(curr);
         visited[curr] = false;
         return result;
     }
