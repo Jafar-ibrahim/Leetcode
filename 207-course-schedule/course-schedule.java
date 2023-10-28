@@ -33,7 +33,7 @@ class Solution {
                 if (!visited[n])
                     result = result && helper(adj, visited, set, n);
 
-                if (/*visited[n]  &&*/ !set.contains(n))
+                else if (/*visited[n]  &&*/ !set.contains(n))
                     return false;
 
                 
