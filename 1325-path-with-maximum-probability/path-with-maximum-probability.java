@@ -1,29 +1,53 @@
 class Solution {
-        public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
-        Map<Integer, Map<Integer, Double>> g = new HashMap<>();
-        for (int i = 0; i < edges.length; ++i) {
-            int[] e = edges[i];
-            g.computeIfAbsent(e[0], m -> new HashMap<>()).put(e[1], succProb[i]);
-            g.computeIfAbsent(e[1], m -> new HashMap<>()).put(e[0], succProb[i]);
+    public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
+        Map<Integer,Map<Integer,Double>> map = new HashMap<>();
+
+        for(int i = 0 ; i < edges.length ; i++){
+            int node = edges[i][0];
+            int neighbor = edges[i][1];
+            double prob = succProb[i];
+
+            map.putIfAbsent(node,new HashMap<>());
+            map.putIfAbsent(neighbor,new HashMap<>());
+
+            map.get(node).put(neighbor,prob);
+            map.get(neighbor).put(node,prob);
         }
-        PriorityQueue<double[]> pq = new PriorityQueue<>(Comparator.comparingDouble(a -> -a[0]));
-        double[] prob = new double[n];
-        pq.offer(new double[]{1, start});
-        while (!pq.isEmpty()) {
-            double[] cur = pq.poll();
-            int v = (int)cur[1];
-            if (v == end) {
-                return cur[0];
-            }
-            if (cur[0] > prob[v]) {
-                prob[v] = cur[0];
-                for (var entry : g.getOrDefault(v, Map.of()).entrySet()) {
-                    int nb = entry.getKey();
-                    double p = entry.getValue();
-                    pq.offer(new double[]{cur[0] * p, nb});
+
+        
+
+        boolean[] visited = new boolean[n];
+        double[] totalProb = new double[n];
+
+        PriorityQueue<Pair<Integer,Double>> pq =
+                new PriorityQueue<>(Comparator.comparingDouble(a -> -a.getValue()));
+
+        pq.add(new Pair(start_node,1.0));
+
+        while(!pq.isEmpty()){
+            //System.out.println(pq);
+            Pair<Integer,Double> curr = pq.poll();
+            int currNode = curr.getKey();
+            double currProb = curr.getValue();
+
+            if(currNode == end_node)
+                return currProb;
+
+            if(visited[currNode]) continue;
+            visited[currNode] = true;
+            Map<Integer,Double> neighbors = map.get(currNode);
+
+            if(currProb > totalProb[currNode] && neighbors != null ){
+                totalProb[currNode] = currProb;
+                for(Map.Entry<Integer,Double> entry : neighbors.entrySet()){
+                    int neighbor = entry.getKey();
+                    double edgeProb = entry.getValue();
+                    double newProb = edgeProb * currProb;
+                    if(newProb > totalProb[neighbor])
+                        pq.add(new Pair(neighbor,newProb));
                 }
             }
         }
-        return 0d;
+        return totalProb[end_node];
     }
 }
