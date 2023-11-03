@@ -1,48 +1,57 @@
+
+class Pair{
+    int node,dist;
+    Pair(int node,int dist){
+        this.node=node;
+        this.dist=dist;
+        
+    }
+}
+
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        int[] nodeTimes = new int[n + 1];
-        Arrays.fill(nodeTimes, Integer.MAX_VALUE);
-        Map<Integer, List<int[]>> graph = new HashMap<>();
-        for (int[] time : times) {
-            int src = time[0];
-            int des = time[1];
-            int tim = time[2];
-            if (!graph.containsKey(src)) {
-                graph.put(src, new ArrayList<int[]>());
-            }
-            graph.get(src).add(new int[]{des, tim});
+        List<List<Pair>> adjList=new ArrayList<>();
+        
+        for(int i=0;i<=n;i++){
+            adjList.add(new ArrayList<Pair>());
         }
-        nodeTimes[k] = 0;
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(k);
-        while (!queue.isEmpty()) {
-            int size = queue.size();
-            for (int i = 0 ; i < size ; i ++) {
-                int node = queue.remove();
-                List<int[]> nears = graph.get(node);
-                if (nears != null) {
-                    for (int[] near : nears) {
-                        int des = near[0];
-                        int tim = near[1];
-                        if (nodeTimes[des] > nodeTimes[node] + tim) {
-                            nodeTimes[des] = nodeTimes[node] + tim;
-                            queue.add(des);
-                        }
-                    }
+        
+        for(int i=0;i<times.length;i++){
+            adjList.get(times[i][0]).add(new Pair(times[i][1],times[i][2]));
+        }
+        
+        PriorityQueue<Pair> pq=new PriorityQueue<>((a,b)->a.dist-b.dist);
+        
+        int[] ans=new int[n+1];
+        Arrays.fill(ans,Integer.MAX_VALUE);
+        ans[k]=0;
+        
+        pq.add(new Pair(k,0));
+        
+        while(!pq.isEmpty()){
+            Pair curr=pq.poll();
+            int ver=curr.node;
+            int dis=curr.dist;
+            
+            for(Pair it:adjList.get(ver)){
+                if(dis+it.dist<ans[it.node]){
+                    ans[it.node]=dis+it.dist;
+                    pq.add(new Pair(it.node,dis+it.dist));
                 }
             }
+            
         }
-        int result = 0;
-        for (int i = 0 ; i < nodeTimes.length ; i ++) {
-            if (i == 0) {
-                continue;
-            }
-            int nodeTime = nodeTimes[i];
-            if (nodeTime == Integer.MAX_VALUE) {
+        
+        int anss=Integer.MIN_VALUE;
+
+        
+        for(int i=1;i<=n;i++){
+            if(ans[i]==Integer.MAX_VALUE){
                 return -1;
             }
-            result = Math.max(result, nodeTime);
+            anss=Math.max(anss,ans[i]);
         }
-        return result;
+        
+        return anss;
     }
 }
