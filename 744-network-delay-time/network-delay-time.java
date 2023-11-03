@@ -1,31 +1,50 @@
 class Solution {
     public int networkDelayTime(int[][] times, int n, int k) {
-        Map<Integer, List<int[]>> graph = new HashMap<>();
-        for (int[] edge: times) {
-            graph.putIfAbsent(edge[0], new ArrayList<>());
-            graph.get(edge[0]).add(new int[]{edge[1], edge[2]});
+        
+        //Step 1
+        Map<Integer, Map<Integer, Integer>> map = new HashMap<>();
+        
+        for(int[] time : times) {
+            int start = time[0];
+            int end = time[1];
+            int weight = time[2];
+            
+            map.putIfAbsent(start, new HashMap<>());
+            map.get(start).put(end, weight);
         }
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> (a[0] - b[0]));
-        boolean[] visited = new boolean[n + 1];
-        int[] minDis = new int[n + 1];
-        Arrays.fill(minDis, Integer.MAX_VALUE);
-        minDis[k] = 0;
-        pq.offer(new int[]{0, k});
-        int max = 0;
-        while (!pq.isEmpty()) {
-            int[] curr = pq.poll();
-            int currNode = curr[1];
-            if (visited[currNode]) continue;
-            visited[currNode] = true;
-            int currDis = curr[0];
-            max = currDis;
-            n--;
-            if (!graph.containsKey(currNode)) continue;
-            for (int[] next : graph.get(currNode)) {
-                if (!visited[next[0]] && currDis + next[1] < minDis[next[0]])
-                    pq.offer(new int[]{currDis + next[1], next[0]});
+        
+         // Step 2
+        int[] dis = new int[n+1];
+        Arrays.fill(dis, Integer.MAX_VALUE);
+        dis[k] = 0;
+        
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{k,0});
+        
+        //Step 3:
+        while(!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int curNode = cur[0];
+            int curWeight = cur[1];
+            
+            for(int next : map.getOrDefault(curNode, new HashMap<>()).keySet()) {
+                int nextweight = map.get(curNode).get(next);
+                
+                if(curWeight + nextweight < dis[next]) {
+                    dis[next] = curWeight + nextweight;
+                    queue.add(new int[]{next, curWeight + nextweight});
+                }
             }
         }
-        return n == 0 ? max : -1;
+        
+        //Step 4:
+        int res = 0;
+        for(int i=1; i<=n; i++) {
+            if(dis[i] > res) {
+                res = Math.max(res, dis[i]);
+            } 
+        }
+        
+        return res == Integer.MAX_VALUE ? -1 : res;
     }
 }
