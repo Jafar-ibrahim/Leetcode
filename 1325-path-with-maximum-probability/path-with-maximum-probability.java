@@ -16,7 +16,6 @@ class Solution {
 
         
 
-        boolean[] visited = new boolean[n];
         double[] totalProb = new double[n];
 
         PriorityQueue<Pair<Integer,Double>> pq =
@@ -25,7 +24,6 @@ class Solution {
         pq.add(new Pair(start_node,1.0));
 
         while(!pq.isEmpty()){
-            //System.out.println(pq);
             Pair<Integer,Double> curr = pq.poll();
             int currNode = curr.getKey();
             double currProb = curr.getValue();
@@ -33,8 +31,6 @@ class Solution {
             if(currNode == end_node)
                 return currProb;
 
-            if(visited[currNode]) continue;
-            visited[currNode] = true;
             Map<Integer,Double> neighbors = map.get(currNode);
 
             if(currProb > totalProb[currNode] && neighbors != null ){
