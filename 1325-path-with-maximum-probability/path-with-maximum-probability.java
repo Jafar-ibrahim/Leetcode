@@ -1,50 +1,49 @@
 class Solution {
-    public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
-
-        List<List<Pair>> lists = new ArrayList<>();
-        for (int i = 0; i < n; i++) lists.add(new ArrayList<>());
-        for (int i = 0; i < edges.length; i++) {
-           int a = edges[i][0], b = edges[i][1];
-           lists.get(a).add(new Pair(b, succProb[i]));
-           lists.get(b).add(new Pair(a, succProb[i]));
-        }
-
-        
-
-        double[] totalProb = new double[n];
-
-        PriorityQueue<Pair> pq =
-                new PriorityQueue<>(Comparator.comparingDouble(a -> -a.prob));
-
-        totalProb[start_node] = 1.0;
-        pq.add(new Pair(start_node,1.0));
-
-        while(!pq.isEmpty()){
-            Pair curr = pq.poll();
-            int currNode = curr.node;
-            double currProb = curr.prob;
-
-            if(currNode == end_node)
-                return totalProb[end_node];
-
-            List<Pair> list = lists.get(currNode);
-            for (Pair pair : list) {
-                if (pair.prob * totalProb[currNode] > totalProb[pair.node]) {
-                    totalProb[pair.node] = pair.prob * totalProb[currNode];
-                    pq.offer(new Pair(pair.node, totalProb[pair.node]));
-                }
-            }
-            
-        }
-        return 0d;
-    }
+    class State {
+	int node;
+	double prob;
+	State(int _node, double _prob) {
+		node = _node;
+		prob = _prob;
+	}
 }
 
-class Pair{
-    double prob;
-    int node;
-    Pair(int node, double prob) {
-        this.prob = prob;
-        this.node = node;
-    }
+public double maxProbability(int n, int[][] edges, double[] succProb, int start, int end) {
+
+	// build graph -> double[0]: node, double[1]: parent-to-node prob
+	Map<Integer, List<double[]>> map = new HashMap<>();
+	for (int i = 0; i < edges.length; ++i) {
+		int[] edge = edges[i];
+
+		map.putIfAbsent(edge[0], new ArrayList<>());
+		map.putIfAbsent(edge[1], new ArrayList<>());
+
+		map.get(edge[0]).add(new double[] {edge[1], succProb[i]});
+		map.get(edge[1]).add(new double[] {edge[0], succProb[i]});
+	}
+
+	double[] probs = new double[n];  // best prob so far for each node
+	PriorityQueue<State> pq = new PriorityQueue<>((a, b) -> (((Double) b.prob).compareTo((Double) a.prob)));
+	pq.add(new State(start, 1.0));
+
+	while (!pq.isEmpty()) {
+
+		State state = pq.poll();
+		int parent = state.node;
+		double prob = state.prob;
+
+		if (parent == end) return prob;
+
+		for (double[] child : map.getOrDefault(parent, new ArrayList<>())) {
+			// add to pq only if: it can make a better prob
+			if (probs[(int) child[0]] >= prob * child[1]) continue;
+
+			pq.add(new State((int) child[0], prob * child[1]));
+			probs[(int) child[0]] = prob * child[1];
+		}
+
+	}
+
+	return 0;
+}
 }
