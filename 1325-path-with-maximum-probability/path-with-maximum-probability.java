@@ -1,17 +1,12 @@
 class Solution {
     public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
-        Map<Integer,Map<Integer,Double>> map = new HashMap<>();
 
-        for(int i = 0 ; i < edges.length ; i++){
-            int node = edges[i][0];
-            int neighbor = edges[i][1];
-            double prob = succProb[i];
-
-            map.putIfAbsent(node,new HashMap<>());
-            map.putIfAbsent(neighbor,new HashMap<>());
-
-            map.get(node).put(neighbor,prob);
-            map.get(neighbor).put(node,prob);
+        List<List<Pair>> lists = new ArrayList<>();
+        for (int i = 0; i < n; i++) lists.add(new ArrayList<>());
+        for (int i = 0; i < edges.length; i++) {
+           int a = edges[i][0], b = edges[i][1];
+           lists.get(a).add(new Pair(b, succProb[i]));
+           lists.get(b).add(new Pair(a, succProb[i]));
         }
 
         
@@ -21,6 +16,7 @@ class Solution {
         PriorityQueue<Pair> pq =
                 new PriorityQueue<>(Comparator.comparingDouble(a -> -a.prob));
 
+        totalProb[start_node] = 1.0;
         pq.add(new Pair(start_node,1.0));
 
         while(!pq.isEmpty()){
@@ -29,24 +25,18 @@ class Solution {
             double currProb = curr.prob;
 
             if(currNode == end_node)
-                return currProb;
+                return totalProb[end_node];
 
-            Map<Integer,Double> neighbors = map.get(currNode);
-
-            if(neighbors != null )
-                
-                for(Map.Entry<Integer,Double> entry : neighbors.entrySet()){
-                    int neighbor = entry.getKey();
-                    double edgeProb = entry.getValue();
-                    double newProb = edgeProb * currProb;
-                    if(newProb > totalProb[neighbor]){
-                        totalProb[currNode] = currProb;
-                        pq.add(new Pair(neighbor,newProb));
-                    }
+            List<Pair> list = lists.get(currNode);
+            for (Pair pair : list) {
+                if (pair.prob * totalProb[currNode] > totalProb[pair.node]) {
+                    totalProb[pair.node] = pair.prob * totalProb[currNode];
+                    pq.offer(new Pair(pair.node, totalProb[pair.node]));
                 }
+            }
             
         }
-        return totalProb[end_node];
+        return 0d;
     }
 }
 
