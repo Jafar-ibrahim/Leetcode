@@ -33,16 +33,18 @@ class Solution {
 
             Map<Integer,Double> neighbors = map.get(currNode);
 
-            if(currProb > totalProb[currNode] && neighbors != null ){
-                totalProb[currNode] = currProb;
+            if(neighbors != null )
+                
                 for(Map.Entry<Integer,Double> entry : neighbors.entrySet()){
                     int neighbor = entry.getKey();
                     double edgeProb = entry.getValue();
                     double newProb = edgeProb * currProb;
-                    if(newProb > totalProb[neighbor])
+                    if(newProb > totalProb[neighbor]){
+                        totalProb[currNode] = currProb;
                         pq.add(new Pair(neighbor,newProb));
+                    }
                 }
-            }
+            
         }
         return totalProb[end_node];
     }
