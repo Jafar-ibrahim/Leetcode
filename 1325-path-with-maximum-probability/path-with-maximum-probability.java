@@ -1,49 +1,36 @@
 class Solution {
     public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
-        Map<Integer,Map<Integer,Double>> map = new HashMap<>();
-
-        for(int i = 0 ; i < edges.length ; i++){
-            int node = edges[i][0];
-            int neighbor = edges[i][1];
-            double prob = succProb[i];
-
-            map.putIfAbsent(node,new HashMap<>());
-            map.putIfAbsent(neighbor,new HashMap<>());
-
-            map.get(node).put(neighbor,prob);
-            map.get(neighbor).put(node,prob);
+        List<List<Pair>> lists = new ArrayList<>();
+        for (int i = 0; i < n; i++) lists.add(new ArrayList<>());
+        for (int i = 0; i < edges.length; i++) {
+           int a = edges[i][0], b = edges[i][1];
+           lists.get(a).add(new Pair(b, succProb[i]));
+           lists.get(b).add(new Pair(a, succProb[i]));
         }
-
-        
-
-        double[] totalProb = new double[n];
-
-        PriorityQueue<Pair<Integer,Double>> pq =
-                new PriorityQueue<>(Comparator.comparingDouble(a -> -a.getValue()));
-
-        pq.add(new Pair(start_node,1.0));
-
-        while(!pq.isEmpty()){
-            Pair<Integer,Double> curr = pq.poll();
-            int currNode = curr.getKey();
-            double currProb = curr.getValue();
-
-            if(currNode == end_node)
-                return currProb;
-
-            Map<Integer,Double> neighbors = map.get(currNode);
-
-            if(currProb > totalProb[currNode] && neighbors != null ){
-                totalProb[currNode] = currProb;
-                for(Map.Entry<Integer,Double> entry : neighbors.entrySet()){
-                    int neighbor = entry.getKey();
-                    double edgeProb = entry.getValue();
-                    double newProb = edgeProb * currProb;
-                    if(newProb > totalProb[neighbor])
-                        pq.add(new Pair(neighbor,newProb));
+        PriorityQueue<Pair> queue = new PriorityQueue<>((a, b) -> Double.compare(b.prob, a.prob));
+        double[] probs = new double[n];
+        probs[start_node] = 1.0;
+        queue.offer(new Pair(start_node, 1.0));
+        while (!queue.isEmpty()) {
+            Pair curPair = queue.poll();
+            if (curPair.node == end_node) return probs[curPair.node];
+            List<Pair> list = lists.get(curPair.node);
+            for (Pair pair : list) {
+                if (pair.prob * probs[curPair.node] > probs[pair.node]) {
+                    probs[pair.node] = pair.prob * probs[curPair.node];
+                    queue.offer(new Pair(pair.node, probs[pair.node]));
                 }
             }
         }
-        return totalProb[end_node];
+
+        return 0;
+    }
+}
+class Pair{
+    double prob;
+    int node;
+    Pair(int node, double prob) {
+        this.prob = prob;
+        this.node = node;
     }
 }
